@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0;">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Homework 3</title>
+
+    <style>
+        label{
+            display: none;
+        }
+
+        .li{
+            padding:12px;
+        }
+
+        .content{
+            display: flex;
+            flex-wrap: wrap;
+            width:1200px;
+            margin:0px auto;
+        }
+
+        .box{
+            width:276px;
+            padding:12px;
+            display:inline-block;
+            text-align: center;
+            vertical-align: center;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .photo{
+            width:276px;
+            padding-top: 56.213%;
+            background-size: cover;
+            background-position: center center;
+        }
+
+        #title{
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        #items{
+            text-align: center;
+            float: right;
+            font-size: 20px;
+        }
+
+        #welcome_letter{
+            display: flex;
+            height: 300px;
+            width:auto;
+            justify-content:center;
+            align-items: center;
+            font-size: 40px;
+            font-weight: bold;
+        }
+
+        @media screen and (max-width:1200px){
+            .box{
+                width:45%;
+            }
+
+            .photo{
+                width:100%;
+            }
+
+            .content{
+                width:90%;
+            }
+
+        }
+
+        @media screen and (max-width:600px){
+            .box{
+                width:90%;
+            }
+
+            .photo{
+                width:100%;
+            }
+
+            .content{
+                width:90%;
+            }
+
+            #items{
+                display: none;
+            }
+
+            label{
+                display: inline-block;
+                text-align: center;
+                float: right;
+                font-size: 20px;
+            }
+        }
+
+    </style>
+
+</head>
+<body>
+    <div class="head">
+        <span id="title">My Website</span>
+        <label for="hamburger">&#9776;</label>
+        <span id="items">
+            <span class="li">Item1</span>
+            <span class="li">Item2</span>
+            <span class="li">Item3</span>
+            <span class="li">Item4</span>
+        </span>
+    </div>
+
+    <div id="welcome_letter">
+        Welcome to MyHome
+    </div>
+
+    <div class="content">
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+
+    </div>
+    
+    <script>
+        fetch("https://padax.github.io/taipei-day-trip-resources/taipei-attractions.json")
+            .then(res => {
+                return res.json();
+            })
+            .then(data =>{
+                attractions = data['result']['results'];
+                
+                let i = 0;
+                for(let attraction of attractions){
+                    site_title = attraction['stitle'];
+                    photo_links = attraction['file'];
+                    first_photo = "http://" + photo_links.split("http://")[1];
+
+                    if(i<8){
+                        let objTo = document.querySelectorAll(".box");
+                        let newImg = document.createElement('div');
+                        let newText = document.createElement('div');
+
+                        newImg.classList.add('photo');
+                        newImg.style.backgroundImage = `url(${first_photo})`;
+                        objTo[i].appendChild(newImg);
+
+                        newText.classList.add('text');
+                        newText.innerText = site_title;
+                        objTo[i].appendChild(newText);
+                    }
+                    
+                    i++;
+                }
+            })
+            .catch(e =>{
+                console.log("ERROR", e);
+            })
+
+    </script>
+</body>
+
+</html>
