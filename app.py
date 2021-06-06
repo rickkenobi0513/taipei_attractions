@@ -4,9 +4,11 @@ from flask import redirect
 from flask import session
 from flask import render_template
 from flask import jsonify
+from flask_cors import CORS
 import mysql.connector
 
 app = Flask(__name__)
+CORS(app)
 app.config["JSON_AS_ASCII"] = False
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.config["JSON_SOIRT_KEYS"] = False
@@ -22,6 +24,10 @@ mycursor = loladb.cursor()
 def db_connection_check():
     if loladb.is_connected() == False:
         loladb.connect()
+
+@app.route("/")
+def index():
+    return render_template("homepage.html")
 
 # APIs
 @app.route("/api/attractions")
@@ -137,5 +143,5 @@ def api_attraction(attractionId):
             return jsonify({"error": True, "message": "attactionId doesn't exist!"})
     except Exception as e:
         return jsonify({"error": True, "message": str(e)})
-        
+
 app.run(host="0.0.0.0", port=3000)

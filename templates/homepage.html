@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <title>Taipei attractions</title>
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Open+Sans);
+        h1{
+            display: flex;
+            justify-content: center;
+            font-size: 80px;
+        }
+        a{
+            position:relative;
+        }
+        body{
+            background: #f2f2f2;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .search {
+            width: 100%;
+            position: relative;
+            display: flex;
+        }
+
+        .searchTerm {
+            width: 100%;
+            border: 3px solid #00B4CC;
+            border-right: none;
+            padding: 5px;
+            height: 20px;
+            border-radius: 5px 0 0 5px;
+            outline: none;
+            color: #9DBFAF;
+        }
+
+        .searchTerm:focus{
+            color: #00B4CC;
+        }
+
+        .searchButton {
+            width: 40px;
+            height: 36px;
+            border: 1px solid #00B4CC;
+            background: #00B4CC;
+            text-align: center;
+            color: #fff;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        /*Resize the wrap to see the search bar change!*/
+        .wrap{
+            width: 30%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #displayInfo{
+            position: relative;
+            justify-content:space-around;
+            text-align: center;
+        }
+
+        .image{
+            display: felx;
+            justify-content: center;
+            text-align: center;
+            width: 276px;
+            height: 276px;
+            background-size: cover;
+            background-position: center center;
+        }
+
+    </style>
+</head>
+<body>
+    <h1 style="color:darkmagenta">台北市景點資訊</h1>
+    <div class="wrap">
+        <a>尋找景點資訊</a>
+        <div class="search">  
+            <input type="text" class="searchTerm" placeholder="輸入地點">
+            <form>
+                <button type="submit" class="searchButton">
+                    <i class="fa fa-search"></i>
+                </button>
+            </form>
+        </div>
+        <div id="displayInfo"></div>
+    </div>
+</body>
+
+<script>
+    const form = document.querySelector('.search');
+    form.addEventListener('submit', function(e){
+        e.preventDefault();
+        const keyword = document.querySelector('input').value;
+        fetch(`http://18.117.205.171:3000/api/attractions?page=0&keyword=${keyword}`)
+        .then(res => {
+            // console.log(res);
+            return res.json();
+        })
+        .then(data => {
+            // console.log(data);
+
+            if(data["data"].length==0){
+                let objTo = document.querySelectorAll("#displayInfo");
+                objTo[0].innerText = "查無資料！";
+            }
+            else{
+                let objTo = document.querySelectorAll("#displayInfo");
+                objTo[0].innerHTML = "";
+                const attraction_name = data["data"][0]["name"];
+                const attraction_image = data["data"][0]["images"][0];
+                console.log(attraction_image);
+
+                let text = document.createElement('div');
+                let image = document.createElement('div');
+
+                text.innerText = attraction_name;
+                objTo[0].appendChild(text);
+
+                image.classList.add('image');
+                image.style.backgroundImage = `url(${attraction_image})`;
+                objTo[0].appendChild(image);
+
+            }
+        })
+    })
+</script>
+
+</html>
