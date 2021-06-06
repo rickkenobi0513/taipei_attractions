@@ -1,5 +1,5 @@
 # taipei_attractions 台北旅遊景點查詢API
-## Homepage
+## Homepage (server架在AWS EC2 instance上, OS為RedHat)
 http://18.117.205.171:3000/
 ### APIs
 1. http://18.117.205.171:3000/api/attractions?page=12
